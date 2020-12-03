@@ -16,8 +16,14 @@ public class PlayerController : MonoBehaviour
     public float movementSpeed = 2;
     public float jumpForce = 2.5f;
     //private Vector2 _mousePos;
+    private Vector3 defaultPlayerPos;
 
     private bool _isDead;
+
+    private void Start()
+    {
+        defaultPlayerPos = transform.position;
+    }
 
     private void Update()
     {
@@ -37,10 +43,6 @@ public class PlayerController : MonoBehaviour
         
         //playerSprite.flipX = movement < 0; // Flips the sprite depending od direction of movement
 
-        // Aiming
-       // _mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-        //Vector2 direction = new Vector2(_mousePos.x - firepoint.position.x, _mousePos.y - firepoint.position.y);
-        //firepoint.up = direction;
 
         if (Input.GetButtonDown("Jump") && Math.Abs(playerRigidbody.velocity.y) < 0.001)
         {
@@ -59,9 +61,9 @@ public class PlayerController : MonoBehaviour
         //}
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (hit.point.x > transform.position.x + 0.5)
+        if (collision.gameObject.tag == "Enemy")
         {
             Death();
         }
@@ -70,12 +72,7 @@ public class PlayerController : MonoBehaviour
     private void Death()
     {
         Debug.Log("dead");
-        _isDead = true;
+        //_isDead = true;
+        transform.position = defaultPlayerPos;
     }
-
-    // private void Shoot()
-   // {
-    //    if (rangedWeapon != null) rangedWeapon.Shoot();
-   //     ;
-    //}
 }
